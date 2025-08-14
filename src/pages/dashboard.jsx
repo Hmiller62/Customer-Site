@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import SearchBar from "../components/SearchBar.jsx"
 import CustomerCard from "../components/CustomerCard.jsx"
 import createCustomer from "../utils/Customer";
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
+
   const dummyCustomers = [
   createCustomer("Jeff Smith", "jeff.smith@example.com", "555-0001"),
   createCustomer("Alice Johnson", "alice.johnson@example.com", "555-0002"),
@@ -83,7 +88,9 @@ export default function Dashboard() {
 
 
 
+
       <div style={{ 
+
         justifyContent: "center",
         display: "flex",
         alignItems: "center",
@@ -96,7 +103,10 @@ export default function Dashboard() {
           <div style={{ 
             minWidth: "400px",
             flex: "1 1 calc(33%)"    //style for 3-column view
-        }}>
+
+        }}
+        onClick={() => {
+          navigate(`/customer/${customer.id}`)}} //click to transport to customer screen
           <CustomerCard key={customer.email} customer={customer} />
           </div>
         ))}

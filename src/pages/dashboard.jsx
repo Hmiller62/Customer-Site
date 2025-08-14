@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar.jsx"
 import CustomerCard from "../components/CustomerCard.jsx"
+import Database from "../utils/database.jsx"
 import createCustomer from "../utils/Customer";
 import { useNavigate } from 'react-router-dom';
 
@@ -10,28 +11,8 @@ export default function Dashboard() {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const dummyCustomers = [
-  createCustomer("Jeff Smith", "jeff.smith@example.com", "555-0001"),
-  createCustomer("Alice Johnson", "alice.johnson@example.com", "555-0002"),
-  createCustomer("Bob Williams", "bob.williams@example.com", "555-0003"),
-  createCustomer("Cathy Brown", "cathy.brown@example.com", "555-0004"),
-  createCustomer("David Lee", "david.lee@example.com", "555-0005"), //later, make a file to store this mess
-  createCustomer("Ella Davis", "ella.davis@example.com", "555-0006"),
-  createCustomer("Frank Miller", "frank.miller@example.com", "555-0007"),
-  createCustomer("Grace Wilson", "grace.wilson@example.com", "555-0008"),
-  createCustomer("Henry Moore", "henry.moore@example.com", "555-0009"),
-  createCustomer("Isla Taylor", "isla.taylor@example.com", "555-0010"),
-  createCustomer("Jack Anderson", "jack.anderson@example.com", "555-0011"),
-  createCustomer("Kara Thomas", "kara.thomas@example.com", "555-0012"),
-  createCustomer("Liam White", "liam.white@example.com", "555-0013"),
-  createCustomer("Mia Harris", "mia.harris@example.com", "555-0014"),
-  createCustomer("Noah Martin", "noah.martin@example.com", "555-0015")
-  ];
-
-
-
-
-  const [customers, setCustomers] = useState(dummyCustomers);
+  
+  const [customers] = useState(Database);
 
   const firstPassCustomers = customers //logic to sort based on search term and remove inactive users
       .filter(customer => customer.active)

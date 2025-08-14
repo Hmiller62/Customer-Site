@@ -33,7 +33,8 @@ export default function Dashboard() {
 
   const [customers, setCustomers] = useState(dummyCustomers);
 
-  const firstPassCustomers = customers //logic to sort based on search term
+  const firstPassCustomers = customers //logic to sort based on search term and remove inactive users
+      .filter(customer => customer.active)
       .filter(customer => 
         customer.name.toLowerCase().includes(searchTerm.toLowerCase()) //remove non-matching customers
         || customer.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -87,7 +88,9 @@ export default function Dashboard() {
 
 
 
-      <div style= {{ 
+
+      <div style={{ 
+
         justifyContent: "center",
         display: "flex",
         alignItems: "center",
@@ -100,10 +103,10 @@ export default function Dashboard() {
           <div style={{ 
             minWidth: "400px",
             flex: "1 1 calc(33%)"    //style for 3-column view
+
         }}
         onClick={() => {
           navigate(`/customer/${customer.id}`)}} //click to transport to customer screen
-        >
           <CustomerCard key={customer.email} customer={customer} />
           </div>
         ))}

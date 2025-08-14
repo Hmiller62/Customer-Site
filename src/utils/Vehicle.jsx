@@ -1,3 +1,3 @@
-export function createVehicle(licenseNum, model, color) {
+export default function createVehicle(licenseNum, model, color) {
     return {licenseNum, model, color}
 }

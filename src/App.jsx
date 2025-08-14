@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import {Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/dashboard'
 import InfoScreen from './pages/infoScreen'
 

@@ -103,8 +103,7 @@ export default function Dashboard() {
           <div style={{ 
             minWidth: "400px",
             flex: "1 1 calc(33%)"    //style for 3-column view
-
-        }}
+        }} >
         onClick={() => {
           navigate(`/customer/${customer.id}`)}} //click to transport to customer screen
           <CustomerCard key={customer.email} customer={customer} />

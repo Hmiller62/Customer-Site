@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Database from "../utils/database.jsx"
 import SubscriptionCard from "../components/SubscriptionCard.jsx"
 import { useNavigate, useParams } from 'react-router-dom';
+import Button from "../components/Button";
 
 export default function InfoScreen() {
 
@@ -35,15 +36,41 @@ export default function InfoScreen() {
                gap: "8px",
               marginTop: "20px"
                }}>
-              <h3>Customer Information</h3>  
-              <div>Email: {currCustomer.email}</div>
-              <div>Phone: {currCustomer.phone}</div>
-              <h3>Active Subscriptions</h3> 
+              <h3>Customer Information</h3>   
+              <div style={{ 
+                display: "flex",   //customer info with buttons
+                alignItems: "center", 
+                gap: "10px", 
+                marginBottom: "8px" 
+                }}>
+                  <p style={{ margin: 0 }}>Email: {currCustomer.email}</p>
+                  <Button onClick={() => console.log("Edit Email")}>Edit</Button>
+              </div>
+
+              <div style={{ 
+                display: "flex", 
+                alignItems: "center", 
+                gap: "10px"
+                }}>
+                  <p style={{ margin: 0 }}>Phone: {currCustomer.phone}</p>
+                  <Button onClick={() => console.log("Edit Phone")}>Edit</Button>
+              </div>
+              <p>Active Balance: ${currCustomer.balance.toFixed(2)}</p>
+              
+
+              <div style={{ 
+                display: "flex", //button to add subscription
+                justifyContent: "space-between", 
+                alignItems: "center" 
+                }}> 
+                  <h3>Active Subscriptions</h3>     
+                  <Button onClick={() => console.log("Add subscription")}>+ Add</Button>    
+              </div>    
 
               <div style={{ 
               
                       justifyContent: "center",
-                      display: "flex",
+                      display: "flex", 
                       alignItems: "center",
                       flexWrap: "wrap",
                       overflowY: "auto",

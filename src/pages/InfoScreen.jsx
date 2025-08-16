@@ -1,13 +1,27 @@
-import React, { useState } from "react";
-import Database from "../utils/database.jsx"
+import React, { useEffect, useState } from "react";
+import loadDatabase from "../utils/database.jsx"
 import SubscriptionCard from "../components/SubscriptionCard.jsx"
-import { useNavigate, useParams } from 'react-router-dom';
+import { createSubscription } from "../utils/Customer.jsx";
+import {useParams } from 'react-router-dom';
 import Button from "../components/Button";
+import createVehicle from "../utils/Vehicle.jsx";
 
 export default function InfoScreen() {
 
   const { id } = useParams();
-  const currCustomer = Database.find(customer => customer.id === id)
+  const [customers, setCustomers] = useState(loadDatabase);
+  const currCustomer = customers.find(customer => customer.id === id)
+
+  useEffect(() => {
+    localStorage.setItem("database", JSON.stringify(customers));
+  }, [customers]);
+
+  
+  const updateCustomer = (updatedCustomer) => {     //use this to put a new customer into the database upon changing info
+    setCustomers(prev =>
+      prev.map(customer => customer.id === updatedCustomer.id ? updatedCustomer : customer)
+    );
+  };
 
 
   const [editingPhone, setEditingPhone] = useState(false);
@@ -41,9 +55,20 @@ export default function InfoScreen() {
   }
 
   const [addingSub, setAddingSub] = useState(false);   //logic for adding subscription
-  const [newVehicle, setNewVehicle] = useState({ license: "", make: "", color: "" });
+  const [newVehicle, setNewVehicle] = useState({ licenseNum: "", model: "", color: "" });
 
 
+  const addSubscription = (newVehicle) => {  //to add a subscription to the car list using save button
+  if (!(newVehicle.licenseNum)|| !(newVehicle.model) || !(newVehicle.color)) {
+    alert("Please fill out all fields");
+    return;
+  }
+  const newSub = createSubscription(newVehicle);
+  updateCustomer({...currCustomer, subscriptions: [...currCustomer.subscriptions, newSub]})
+  setAddingSub(false);
+  setNewVehicle({ licenseNum: "", model: "", color: "" });
+  console.log("Observe:", currCustomer.subscriptions)
+  }
 
   return (
       <div
@@ -85,7 +110,7 @@ export default function InfoScreen() {
                     if (editingEmail) {
                       const isValid = email.includes("@") && !(email.includes(" "));
                       if (isValid) {
-                        currCustomer.email = email;
+                        updateCustomer({...currCustomer, email})
                       } else {
                         setEmail(currCustomer.email);
                       }
@@ -105,9 +130,9 @@ export default function InfoScreen() {
                   </p>
                   <Button onClick={() => {
                     if (editingPhone) {
-                      const isValid = phoneNum.length >= 7 && !/[a-zA-Z]/.test(phoneNum);
+                      const isValid = phoneNum.length >= 7 && !(/[a-zA-Z]/.test(phoneNum));
                       if (isValid) {
-                        currCustomer.phone = phoneNum;
+                        updateCustomer({...currCustomer, phone: phoneNum})
                       } else {
                         setPhoneNum(currCustomer.phone);
                       }
@@ -125,21 +150,22 @@ export default function InfoScreen() {
                 alignItems: "center" 
                 }}> 
                   <h3>Active Subscriptions</h3>     
+                  {!addingSub &&
                   <Button onClick={() => setAddingSub(true)}>+ Add</Button>
-
+                  }
                   {addingSub && (
                     <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                       <input 
                         type="text" 
                         placeholder="License Plate" 
-                        value={newVehicle.license} 
-                        onChange={(e) => setNewVehicle({...newVehicle, license: e.target.value})} 
+                        value={newVehicle.licenseNum} 
+                        onChange={(e) => setNewVehicle({...newVehicle, licenseNum: e.target.value})} 
                       />
                       <input 
                         type="text" 
                         placeholder="Make" 
-                        value={newVehicle.make} 
-                        onChange={(e) => setNewVehicle({...newVehicle, make: e.target.value})} 
+                        value={newVehicle.model} 
+                        onChange={(e) => setNewVehicle({...newVehicle, model: e.target.value})} 
                       />
                       <input 
                         type="text" 
@@ -147,22 +173,11 @@ export default function InfoScreen() {
                         value={newVehicle.color} 
                         onChange={(e) => setNewVehicle({...newVehicle, color: e.target.value})} 
                       />
-                      <Button onClick={handleAddSubscription}>Add</Button>
+                      <Button onClick={() => addSubscription(newVehicle)}>Save</Button>
                       <Button onClick={() => setAddingSub(false)}>Cancel</Button>
                     </div>
                   )}
               </div>  
-
-
-
-
-
-
-
-
-
-
-
 
 
               <div style={{ 
@@ -191,9 +206,3 @@ export default function InfoScreen() {
     </div>
 )}
 
-function handleAddSubscription() {
-  const newSub = addSubscription(newVehicle, uuidv4());
-  currCustomer.subscriptions.push(newSub);
-  setAddingSub(false);
-  setNewVehicle({ license: "", make: "", color: "" });
-}

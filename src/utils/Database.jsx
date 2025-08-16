@@ -33,4 +33,14 @@ const dummyCustomers = [
   createCustomer("Joseph Scott", "joseph.scott@example.net", "404-555-2457")
   ];
 
-  export default dummyCustomers;
+  function loadDatabase() {
+  const saved = localStorage.getItem("database");
+  if (saved) {
+    return JSON.parse(saved);
+  }
+  
+  localStorage.setItem("database", JSON.stringify(dummyCustomers));
+  return dummyCustomers;
+}
+
+  export default loadDatabase;

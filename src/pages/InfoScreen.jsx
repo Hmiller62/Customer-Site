@@ -84,12 +84,16 @@ export default function InfoScreen() {
             <div 
             style={{ 
               display: "flex",
-              justifyContent: "space-between", 
               alignItems: "center",
-              paddingRight: "200px"
+              justifyContent: "space-between",
+              paddingRight: "100px",
+              marginBottom: "100px"
               }}>
+                <div style={{display: "flex",alignItems: "center", gap: "150px"}}>
                   <h1>{currCustomer.name}</h1>
-                  <span>{currCustomer.active ? "Active Customer" : "Inactive"}</span>
+                  <p>{currCustomer.active ? "Active Customer" : "Inactive"}</p>
+                </div>
+                <Button style={{ marginLeft: "auto"}}>Return to Dashboard</Button>
             </div>
             <div 
             style={{ 

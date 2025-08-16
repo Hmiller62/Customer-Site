@@ -14,14 +14,14 @@ const cardStyle = {
   position: "relative"
 };
 
-export default function SubscriptionCard({vehicle}) {
+export default function SubscriptionCard({vehicle, editSubscription, deleteSubscription}) {
   return (
     <div style ={cardStyle} className="vehicle-card">
       <h2>{vehicle.licenseNum}</h2>
       <p>{vehicle.color} {vehicle.model}</p>
       <div style={{ position: "absolute", top: "10px", right: "10px", display: "flex", gap: "5px" }}>
-        <Button onClick={() => console.log("Edit!")}>Edit</Button>
-        <Button onClick={() => console.log("Delete!")}>Delete</Button>
+        <Button onClick={() => editSubscription(vehicle)}>Edit</Button>
+        <Button onClick={() => deleteSubscription(vehicle)}>Delete</Button>
       </div>
     </div>
     

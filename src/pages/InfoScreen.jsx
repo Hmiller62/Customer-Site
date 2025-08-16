@@ -55,8 +55,10 @@ export default function InfoScreen() {
     emailDisplay = currCustomer.email
   }
 
-  const [addingSub, setAddingSub] = useState(false);   //logic for adding subscription
+  const [addingSub, setAddingSub] = useState(false);   //logic for adding/editing subscription
+  const [editingVehicle, setEditingVehicle] = useState(null);
   const [newVehicle, setNewVehicle] = useState({ licenseNum: "", model: "", color: "" });
+  const [editVData, setEditVData] = useState({ licenseNum: "", color: "", model: "" });
 
 
   const addSubscription = (newVehicle) => {  //to add a subscription to the car list using save button
@@ -70,6 +72,28 @@ export default function InfoScreen() {
   setNewVehicle({ licenseNum: "", model: "", color: "" });
   console.log("Observe:", currCustomer.subscriptions)
   }
+
+
+  const deleteSubscription = (vehicle) => {
+    console.log("verified")
+    updateCustomer({...currCustomer, subscriptions: currCustomer.subscriptions.filter(item => item !== vehicle)
+  });
+  }
+
+  const startEditing = (vehicle) => {
+    setEditingVehicle(vehicle);
+    setEditVData(vehicle); // preload form with existing values
+  };
+
+  const saveEdit = () => {
+    updateCustomer({
+      ...currCustomer,
+      subscriptions: currCustomer.subscriptions.map(v =>
+        v === editingVehicle ? editVData : v
+      ),
+    });
+    setEditingVehicle(null); // close form
+  };
 
   return (
       <div
@@ -119,6 +143,7 @@ export default function InfoScreen() {
                       if (isValid) {
                         updateCustomer({...currCustomer, email})
                       } else {
+                        alert("Email must include an @ symbol and may not include spaces.")
                         setEmail(currCustomer.email);
                       }
                     }
@@ -141,6 +166,7 @@ export default function InfoScreen() {
                       if (isValid) {
                         updateCustomer({...currCustomer, phone: phoneNum})
                       } else {
+                        alert("Phone number must be at minimum 7 digits and may not include letters.")
                         setPhoneNum(currCustomer.phone);
                       }
                     }
@@ -186,28 +212,58 @@ export default function InfoScreen() {
                   )}
               </div>  
 
-
-              <div style={{ 
-              
-                      justifyContent: "center",
-                      display: "flex", 
-                      alignItems: "center",
-                      flexWrap: "wrap",
-                      overflowY: "auto",
-                      maxHeight: "600px",
-                      gap: "7px"
+              <div>
+                {editingVehicle && ( //box that pops up when you edit vehicle
+                      <div style={{ marginTop: "20px", padding: "10px", border: "1px solid gray" }}>
+                        <h3>Edit Vehicle</h3>
+                        <input
+                          type="text"
+                          value={editVData.licenseNum}
+                          onChange={(e) => setEditVData({ ...editVData, licenseNum: e.target.value })}
+                          placeholder="License Number"
+                        />
+                        <input
+                          type="text"
+                          value={editVData.model}
+                          onChange={(e) => setEditVData({ ...editVData, model: e.target.value })}
+                          placeholder="Model"
+                        />
+                        <input
+                          type="text"
+                          value={editVData.color}
+                          onChange={(e) => setEditVData({ ...editVData, color: e.target.value })}
+                          placeholder="Color"
+                        />
+                        <button onClick={saveEdit}>Save</button>
+                        <button onClick={() => setEditingVehicle(null)}>Cancel</button>
+                      </div>
+                    )}
+                <div style={{   //style for subscriptionList
+                        justifyContent: "center",
+                         display: "flex", 
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                        overflowY: "auto",
+                        maxHeight: "600px",
+                        gap: "7px"
                       }}>                     
-                      {currCustomer.subscriptions.map((subscription) => (
-                        <div style={{ 
-                          minWidth: "400px",
-                          flex: "1 1 calc(33%)"    //style for 3-column view
-                      }} 
+                        {currCustomer.subscriptions.map((subscription) => (
+                          <div style={{ 
+                            minWidth: "400px",
+                            flex: "1 1 calc(33%)"    //style for 3-column view
+                        }} 
                         >
-                        <SubscriptionCard key={subscription.licenseNum} vehicle={subscription} />
-                        </div>
-                      ))}
-                    </div>
-
+                          <SubscriptionCard 
+                          key={subscription.licenseNum} 
+                          vehicle={subscription} 
+                          editSubscription={startEditing}
+                          deleteSubscription={deleteSubscription}
+                          />
+                          </div>
+                        ))}
+                      </div>
+                      
+              </div>
         </div>
       </div>
     </div>

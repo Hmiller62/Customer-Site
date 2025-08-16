@@ -4,11 +4,12 @@ import SubscriptionCard from "../components/SubscriptionCard.jsx"
 import { createSubscription } from "../utils/Customer.jsx";
 import {useParams } from 'react-router-dom';
 import Button from "../components/Button";
-import createVehicle from "../utils/Vehicle.jsx";
+import { useNavigate } from 'react-router-dom';
 
 export default function InfoScreen() {
 
   const { id } = useParams();
+  const navigate = useNavigate();
   const [customers, setCustomers] = useState(loadDatabase);
   const currCustomer = customers.find(customer => customer.id === id)
 
@@ -93,7 +94,9 @@ export default function InfoScreen() {
                   <h1>{currCustomer.name}</h1>
                   <p>{currCustomer.active ? "Active Customer" : "Inactive"}</p>
                 </div>
-                <Button style={{ marginLeft: "auto"}}>Return to Dashboard</Button>
+                <Button style={{ marginLeft: "auto"}} onClick={() => {
+                navigate(`/`)}}>Return to Dashboard</Button>
+
             </div>
             <div 
             style={{ 

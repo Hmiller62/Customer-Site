@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import loadDatabase from "../utils/database.jsx"
 import SubscriptionCard from "../components/SubscriptionCard.jsx"
+import TransactionCard from "../components/TransactionCard";
 import { createSubscription } from "../utils/Customer.jsx";
 import {useParams } from 'react-router-dom';
 import Button from "../components/Button";
@@ -40,6 +41,22 @@ export default function InfoScreen() {
     phoneDisplay = currCustomer.phone
   }
 
+
+  const [editingName, setEditingName] = useState(false);
+  const [disName, setDisName] = useState(currCustomer.name);
+
+  let displayName = " "; //same logic for name
+  if (editingName) {
+    displayName = (
+    <input
+    type="text"
+    value={disName}
+    onChange={(inp) => setDisName(inp.target.value)}
+    />)
+  } else {
+    displayName = currCustomer.name
+  }
+
   const [editingEmail, setEditingEmail] = useState(false);
   const [email, setEmail] = useState(currCustomer.email);
 
@@ -55,6 +72,8 @@ export default function InfoScreen() {
     emailDisplay = currCustomer.email
   }
 
+  const [editPay, setEditPay] = useState(false);
+
   const [addingSub, setAddingSub] = useState(false);   //logic for adding/editing subscription
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [newVehicle, setNewVehicle] = useState({ licenseNum: "", model: "", color: "" });
@@ -63,7 +82,7 @@ export default function InfoScreen() {
 
   const addSubscription = (newVehicle) => {  //to add a subscription to the car list using save button
   if (!(newVehicle.licenseNum)|| !(newVehicle.model) || !(newVehicle.color)) {
-    alert("Please fill out all fields");
+    alert("Please fill out all fields.");
     return;
   }
   const newSub = createSubscription(newVehicle);
@@ -94,6 +113,40 @@ export default function InfoScreen() {
     });
     setEditingVehicle(null); // close form
   };
+
+  const [addingTransaction, setAddingTransaction] = useState(false);
+  const [newTransaction, setNewTransaction] = useState({amount: "", description: "", date: ""})
+
+  const addTransaction = () => {
+    if (!(newTransaction.amount)|| !(newTransaction.description) || !(newTransaction.date)) {
+    alert("Please fill out all fields.");
+    return;
+  }
+  const amount = parseFloat(newTransaction.amount);
+    if (isNaN(amount)) {
+    return alert("Transaction amount must be a number.");
+  }
+    updateCustomer({...currCustomer, transactions: [...currCustomer.transactions, newTransaction]})
+    setNewTransaction({amount: "", description: "", date: ""})
+    setAddingTransaction(false)
+  }
+
+  const deleteTransaction = (transaction) => {
+    updateCustomer({...currCustomer, transactions: currCustomer.transactions.filter(item => item !== transaction)
+  });
+  }
+
+  useEffect(() => {
+    if (!currCustomer || !currCustomer.transactions) return;
+    const newBalance = currCustomer.transactions.reduce(
+      (total, transaction) => total + parseFloat(transaction.amount || 0),
+      0
+    );
+
+    if (newBalance !== currCustomer.balance) {
+      updateCustomer({ ...currCustomer, balance: newBalance });
+    }
+  }, [currCustomer.transactions]); 
 
   return (
       <div
@@ -129,9 +182,24 @@ export default function InfoScreen() {
                gap: "8px",
               marginTop: "20px"
                }}>
-              <h3>Customer Information</h3>   
+              <h3>Customer Information</h3> 
               <div style={{ 
                 display: "flex",   //customer info with buttons
+                alignItems: "center", 
+                gap: "10px", 
+                marginBottom: "8px" 
+                }}>
+                  <p style={{ margin: 0 }}>Name: {displayName}</p>
+                  <Button onClick={() => {
+                    if (editingName) {
+                      updateCustomer({...currCustomer, name: disName})
+                    }
+                    setEditingName(!(editingName))
+                    }
+                    }>{editingName? "Save" : "Edit"}</Button>
+              </div>  
+              <div style={{ 
+                display: "flex",   
                 alignItems: "center", 
                 gap: "10px", 
                 marginBottom: "8px" 
@@ -174,7 +242,79 @@ export default function InfoScreen() {
                   }
                   }>{editingPhone ? "Save" : "Edit"}</Button>
               </div>
+
               <p>Active Balance: ${currCustomer.balance.toFixed(2)}</p>
+              <div style={{
+                display: "flex",
+                flexDirection: "column",   
+                alignItems: "stretch",              //transaction logic
+                width: "100%"
+              }}>
+                  <div style= {{alignItems: "flex-start"}}>
+                      <Button onClick={() => setEditPay(!editPay)}>{editPay ? "Close Payment Info" : "View Payment Info"}</Button>
+                  </div>
+
+                  {editPay && (
+                    <div style={{marginTop: "10px"}}>
+                      <div style={{ 
+                        display: "flex", 
+                        justifyContent: "space-between", 
+                        alignItems: "center", 
+                        marginBottom: "10px", 
+                        width: "90%",
+                        }}>
+                        <h3>Transactions</h3>
+                        {!addingTransaction && (
+                          <Button onClick={() => setAddingTransaction(true)}>+ Add Charge</Button>
+                        )}
+                      </div>
+
+                      {addingTransaction && (
+                        <div style={{ 
+                          display: "flex", 
+                          gap: "8px", 
+                          marginBottom: "10px" 
+                          }}>
+                          <input
+                            type="text"
+                            placeholder="Amount"
+                            value={newTransaction.amount}
+                            onChange={(e) => setNewTransaction({...newTransaction, amount: e.target.value})}
+                          />
+                          <input
+                            type="text"
+                            placeholder="Description"
+                            value={newTransaction.description}
+                            onChange={(e) => setNewTransaction({...newTransaction, description: e.target.value})}
+                          />
+                          <input
+                            type="date"
+                            value={newTransaction.date}
+                            onChange={(e) => setNewTransaction({...newTransaction, date: e.target.value})}
+                          />
+                          <Button onClick={addTransaction}>Submit</Button>
+                          <Button onClick={() => setAddingTransaction(false)}>Cancel</Button>
+                        </div>
+                      )}
+
+                      <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "60%" }}>
+                            {currCustomer.transactions.length === 0 && (
+                              <p style={{ marginTop: "10px" }}>No transactions found.</p>
+                            )}
+
+                            {currCustomer.transactions.length > 0 &&
+                              currCustomer.transactions.map((transaction, index) => (
+                                <TransactionCard
+                                  key={index}
+                                  transaction={transaction}
+                                  deleteTransaction={deleteTransaction}
+                                />
+                              ))
+                            }
+                      </div>
+                    </div>
+                  )}
+              </div>
               
 
               <div style={{ 

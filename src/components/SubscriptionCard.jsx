@@ -1,5 +1,3 @@
-import React from "react";
-import Vehicle from "../utils/Vehicle"
 import Button from "./Button"
 
 const cardStyle = {

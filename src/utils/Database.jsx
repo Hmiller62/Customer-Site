@@ -33,7 +33,7 @@ const dummyCustomers = [
   createCustomer("Joseph Scott", "joseph.scott@example.net", "404-555-2457")
   ];
 
-  function loadDatabase() {
+  function loadDatabase() {                        //when database is loaded, see if it exists. If not, put dummyCustomers in
   const saved = localStorage.getItem("database");
   if (saved) {
     return JSON.parse(saved);

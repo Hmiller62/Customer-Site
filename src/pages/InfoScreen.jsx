@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SubscriptionCard from "../components/SubscriptionCard.jsx"
 import TransactionCard from "../components/TransactionCard";
 import { createSubscription } from "../utils/Customer.jsx";
@@ -12,21 +12,16 @@ export default function InfoScreen({customers, setCustomers}) {
   const navigate = useNavigate();
   const currCustomer = customers.find(customer => customer.id === id)
 
-  useEffect(() => {
-    localStorage.setItem("database", JSON.stringify(customers));
-  }, [customers]);
-
   
-  const updateCustomer = (updatedCustomer) => {     //use this to put a new customer into the database upon changing info
+  const updateCustomer = (updatedCustomer) => {   //use this to put a new customer into the database upon changing info
     setCustomers(prev =>
       prev.map(customer => customer.id === updatedCustomer.id ? updatedCustomer : customer)
     );
   };
 
-  const deleteCustomer = (id) => {
+  const deleteCustomer = (id) => {              //removes a customer from database
       setCustomers(prev => {
     const updated = prev.filter(customer => customer.id !== id);
-    console.log(updated); // <-- correct, new state
     return updated;
   })
   }
@@ -79,6 +74,8 @@ export default function InfoScreen({customers, setCustomers}) {
     emailDisplay = currCustomer.email
   }
 
+
+
   const [editPay, setEditPay] = useState(false);
 
   const [addingSub, setAddingSub] = useState(false);   //logic for adding/editing subscription
@@ -96,19 +93,17 @@ export default function InfoScreen({customers, setCustomers}) {
   updateCustomer({...currCustomer, subscriptions: [...currCustomer.subscriptions, newSub]})
   setAddingSub(false);
   setNewVehicle({ licenseNum: "", model: "", color: "" });
-  console.log("Observe:", currCustomer.subscriptions)
   }
 
 
-  const deleteSubscription = (vehicle) => {
-    console.log("verified")
+  const deleteSubscription = (vehicle) => {    //delete a subscription
     updateCustomer({...currCustomer, subscriptions: currCustomer.subscriptions.filter(item => item !== vehicle)
   });
   }
 
-  const startEditing = (vehicle) => {
+  const startEditing = (vehicle) => {  //edit and save (transfer) subscription
     setEditingVehicle(vehicle);
-    setEditVData(vehicle); // preload form with existing values
+    setEditVData(vehicle); 
   };
 
   const saveEdit = () => {
@@ -118,10 +113,14 @@ export default function InfoScreen({customers, setCustomers}) {
         v === editingVehicle ? editVData : v
       ),
     });
-    setEditingVehicle(null); // close form
+    setEditingVehicle(null); 
   };
 
-  const [addingTransaction, setAddingTransaction] = useState(false);
+
+
+
+
+  const [addingTransaction, setAddingTransaction] = useState(false);   //logic for adding/editing transactions
   const [newTransaction, setNewTransaction] = useState({amount: "", description: "", date: ""})
 
   const addTransaction = () => {
@@ -143,7 +142,7 @@ export default function InfoScreen({customers, setCustomers}) {
   });
   }
 
-  useEffect(() => {
+  useEffect(() => {        //display new balance based on saved transactions
     if (!currCustomer || !currCustomer.transactions) return;
     const newBalance = currCustomer.transactions.reduce(
       (total, transaction) => total + parseFloat(transaction.amount || 0),
@@ -155,7 +154,7 @@ export default function InfoScreen({customers, setCustomers}) {
     }
   }, [currCustomer.transactions]); 
 
-  const [addingCoupon, setAddingCoupon] = useState(false);
+  const [addingCoupon, setAddingCoupon] = useState(false);   //add a coupon as a transaction
   const [newCoupon, setNewCoupon] = useState("")
 
   const addCoupon = () => {
@@ -170,7 +169,10 @@ export default function InfoScreen({customers, setCustomers}) {
         setAddingCoupon(false);
       }
 
-  return (
+
+
+
+  return (     //style and elements on the screen
       <div
       style={{
         paddingLeft: "50px",
@@ -191,9 +193,9 @@ export default function InfoScreen({customers, setCustomers}) {
               }}>
                 <div style={{display: "flex",alignItems: "center", gap: "150px"}}>
                   <h1>{currCustomer.name}</h1>
-                  <p>{currCustomer.active ? "Active Customer" : "Inactive"}</p>
+                  <p>{currCustomer.active ? "Active Customer" : "Inactive"}</p> 
                 </div>
-                <Button style={{ marginLeft: "auto"}} onClick={() => {
+                <Button style={{ marginLeft: "auto"}} onClick={() => { //display customer name, activity, and main buttons
                 navigate(`/`)}}>Return to Dashboard</Button>
                 <Button style={{marginLeft: "auto"}} onClick={() => {
                   if (!window.confirm(`Are you sure you want to delete ${currCustomer.name}'s account?`)) {
@@ -202,9 +204,14 @@ export default function InfoScreen({customers, setCustomers}) {
                   navigate(`/`);
                   deleteCustomer(currCustomer.id);
                 }}>Delete Customer Account</Button>
-
             </div>
-            <div 
+
+
+
+
+
+
+            <div        //display for customer info, option to edit name/phone/email
             style={{ 
               display: "flex", 
               flexDirection: "column",
@@ -213,13 +220,13 @@ export default function InfoScreen({customers, setCustomers}) {
                }}>
               <h3>Customer Information</h3> 
               <div style={{ 
-                display: "flex",   //customer info with buttons
+                display: "flex", 
                 alignItems: "center", 
                 gap: "10px", 
                 marginBottom: "8px" 
                 }}>
                   <p style={{ margin: 0 }}>Name: {displayName}</p>
-                  <Button onClick={() => {
+                  <Button onClick={() => {        //name section
                     if (editingName) {
                       updateCustomer({...currCustomer, name: disName})
                     }
@@ -234,7 +241,7 @@ export default function InfoScreen({customers, setCustomers}) {
                 marginBottom: "8px" 
                 }}>
                   <p style={{ margin: 0 }}>Email: {emailDisplay}</p>
-                  <Button onClick={() => {
+                  <Button onClick={() => {              //email section
                     if (editingEmail) {
                       const isValid = email.includes("@") && !(email.includes(" "));
                       if (isValid) {
@@ -248,8 +255,6 @@ export default function InfoScreen({customers, setCustomers}) {
                     }
                     }>{editingEmail ? "Save" : "Edit"}</Button>
               </div>
-
-
               <div style={{ 
                 display: "flex", 
                 alignItems: "center", 
@@ -257,7 +262,7 @@ export default function InfoScreen({customers, setCustomers}) {
                 }}>
                   <p style={{ margin: 0 }}>Phone: {phoneDisplay}
                   </p>
-                  <Button onClick={() => {
+                  <Button onClick={() => {       //phone section
                     if (editingPhone) {
                       const isValid = phoneNum.length >= 7 && !(/[a-zA-Z]/.test(phoneNum));
                       if (isValid) {
@@ -272,18 +277,23 @@ export default function InfoScreen({customers, setCustomers}) {
                   }>{editingPhone ? "Save" : "Edit"}</Button>
               </div>
 
+
+
+
+
               <p>Active Balance: ${currCustomer.balance.toFixed(2)}</p>
               <div style={{
                 display: "flex",
                 flexDirection: "column",   
-                alignItems: "stretch",              //transaction logic
+                alignItems: "stretch",              //display and editing for transactions
                 width: "100%"
               }}>
-                  <div style= {{alignItems: "flex-start"}}>
-                      <Button onClick={() => setEditPay(!editPay)}>{editPay ? "Close Payment Info" : "View Payment Info"}</Button>
-                  </div>
+                <div style= {{alignItems: "flex-start"}}>
+                  <Button onClick={() => setEditPay(!editPay)}>{editPay ? "Close Payment Info" : "View Payment Info"}</Button>
+                </div>
 
-                  {editPay && (
+
+                  {editPay && (                         //only visible when view button clicked 
                     <div style={{marginTop: "10px"}}>
                       <div style={{ 
                         display: "flex", 
@@ -306,7 +316,7 @@ export default function InfoScreen({customers, setCustomers}) {
                         </div>
                       </div>
 
-                      {addingTransaction && (
+                      {addingTransaction && ( //text boxes for adding transaction
                         <div style={{ 
                           display: "flex", 
                           gap: "8px", 
@@ -334,7 +344,7 @@ export default function InfoScreen({customers, setCustomers}) {
                         </div>
                       )}
 
-                      {addingCoupon &&
+                      {addingCoupon &&           //logic for adding a coupon
                       <div style={{ 
                           display: "flex", 
                           gap: "8px", 
@@ -356,7 +366,7 @@ export default function InfoScreen({customers, setCustomers}) {
                               <p style={{ marginTop: "10px" }}>No transactions found.</p>
                             )}
 
-                            {currCustomer.transactions.length > 0 &&
+                            {currCustomer.transactions.length > 0 &&        //transaction cards
                               currCustomer.transactions.map((transaction, index) => (
                                 <TransactionCard
                                   key={index}
@@ -371,8 +381,12 @@ export default function InfoScreen({customers, setCustomers}) {
               </div>
               
 
+
+
+
+
               <div style={{ 
-                display: "flex", //button to add subscription
+                display: "flex", //logic for viewing/altering subscriptions
                 justifyContent: "space-between", 
                 alignItems: "center" 
                 }}> 
@@ -407,7 +421,7 @@ export default function InfoScreen({customers, setCustomers}) {
               </div>  
 
               <div>
-                {editingVehicle && ( //box that pops up when you edit vehicle
+                {editingVehicle && (        //logic for fields to edit subscription
                       <div style={{ marginTop: "20px", padding: "10px", border: "1px solid gray" }}>
                         <h3>Edit Vehicle</h3>
                         <input
@@ -432,7 +446,7 @@ export default function InfoScreen({customers, setCustomers}) {
                         <button onClick={() => setEditingVehicle(null)}>Cancel</button>
                       </div>
                     )}
-                <div style={{   //style for subscriptionList
+                <div style={{                   //subscriptions card display
                         justifyContent: "center",
                          display: "flex", 
                         alignItems: "center",

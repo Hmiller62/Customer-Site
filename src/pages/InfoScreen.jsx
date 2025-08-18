@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import loadDatabase from "../utils/database.jsx"
 import SubscriptionCard from "../components/SubscriptionCard.jsx"
 import TransactionCard from "../components/TransactionCard";
 import { createSubscription } from "../utils/Customer.jsx";
@@ -7,11 +6,10 @@ import {useParams } from 'react-router-dom';
 import Button from "../components/Button";
 import { useNavigate } from 'react-router-dom';
 
-export default function InfoScreen() {
+export default function InfoScreen({customers, setCustomers}) {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const [customers, setCustomers] = useState(loadDatabase);
   const currCustomer = customers.find(customer => customer.id === id)
 
   useEffect(() => {
@@ -24,6 +22,15 @@ export default function InfoScreen() {
       prev.map(customer => customer.id === updatedCustomer.id ? updatedCustomer : customer)
     );
   };
+
+  const deleteCustomer = (id) => {
+      setCustomers(prev => {
+    const updated = prev.filter(customer => customer.id !== id);
+    console.log(updated); // <-- correct, new state
+    return updated;
+  })
+  }
+
 
 
   const [editingPhone, setEditingPhone] = useState(false);
@@ -188,6 +195,13 @@ export default function InfoScreen() {
                 </div>
                 <Button style={{ marginLeft: "auto"}} onClick={() => {
                 navigate(`/`)}}>Return to Dashboard</Button>
+                <Button style={{marginLeft: "auto"}} onClick={() => {
+                  if (!window.confirm(`Are you sure you want to delete ${currCustomer.name}'s account?`)) {
+                    return;
+                  }    
+                  navigate(`/`);
+                  deleteCustomer(currCustomer.id);
+                }}>Delete Customer Account</Button>
 
             </div>
             <div 

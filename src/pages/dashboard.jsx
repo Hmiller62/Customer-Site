@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SearchBar from "../components/SearchBar.jsx"
 import CustomerCard from "../components/CustomerCard.jsx"
 import { useNavigate } from 'react-router-dom';
@@ -57,12 +57,12 @@ export default function Dashboard({customers, setCustomers}) {
 
           <SearchBar
             value={searchTerm}        
-            onChange={setSearchTerm}  
+            onChange={setSearchTerm}   //customer search bar
             placeholder="Search customers..." 
           />
         </div>
 
-      <div style={{ 
+      <div style={{   //customer card style
 
         justifyContent: "center",
         display: "flex",

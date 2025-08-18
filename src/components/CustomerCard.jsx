@@ -1,6 +1,3 @@
-import React from "react";
-import Customer from "../utils/Customer"
-
 const cardStyle = {
   border: "3px solid #007BFF",
   backgroundColor: "#E6F2FF",

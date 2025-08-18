@@ -148,6 +148,21 @@ export default function InfoScreen() {
     }
   }, [currCustomer.transactions]); 
 
+  const [addingCoupon, setAddingCoupon] = useState(false);
+  const [newCoupon, setNewCoupon] = useState("")
+
+  const addCoupon = () => {
+        const couponValue = parseFloat(newCoupon);
+        if (isNaN(couponValue) || couponValue <= 0) {
+          alert("Please enter the amount of money subtracted by the coupon, as a positive integer.");
+          return;
+        }
+        let couponTA = {amount: -(couponValue), description: "Coupon submitted by admin", date: "N/A"}
+        updateCustomer({...currCustomer, transactions: [...currCustomer.transactions, couponTA]})
+        setNewCoupon("");
+        setAddingCoupon(false);
+      }
+
   return (
       <div
       style={{
@@ -264,9 +279,17 @@ export default function InfoScreen() {
                         width: "90%",
                         }}>
                         <h3>Transactions</h3>
-                        {!addingTransaction && (
+                        <div style={{
+                          display: "flex",
+                          flexDirection: "column"
+                        }}>
+                          {!addingTransaction && (
                           <Button onClick={() => setAddingTransaction(true)}>+ Add Charge</Button>
-                        )}
+                          )}
+                          {!addingCoupon && (
+                          <Button onClick={() => setAddingCoupon(true)}>Submit Coupon</Button>
+                          )}
+                        </div>
                       </div>
 
                       {addingTransaction && (
@@ -296,6 +319,23 @@ export default function InfoScreen() {
                           <Button onClick={() => setAddingTransaction(false)}>Cancel</Button>
                         </div>
                       )}
+
+                      {addingCoupon &&
+                      <div style={{ 
+                          display: "flex", 
+                          gap: "8px", 
+                          marginBottom: "10px" 
+                          }}>
+                          <input
+                            type="text"
+                            placeholder="Coupon Amount"
+                            value={newCoupon}
+                            onChange={(e) => setNewCoupon(e.target.value)}
+                          />
+                          <Button onClick={addCoupon}>Submit</Button>
+                          <Button onClick={() => setAddingCoupon(false)}>Cancel</Button>
+                        </div>
+                      }
 
                       <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "60%" }}>
                             {currCustomer.transactions.length === 0 && (

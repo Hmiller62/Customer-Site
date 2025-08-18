@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar.jsx"
 import CustomerCard from "../components/CustomerCard.jsx"
-import Database from "../utils/database.jsx"
-import createCustomer from "../utils/Customer";
 import { useNavigate } from 'react-router-dom';
 
-export default function Dashboard() {
+export default function Dashboard({customers, setCustomers}) {
 
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  
-  const [customers] = useState(Database);
 
   const firstPassCustomers = customers //logic to sort based on search term and remove inactive users
       .filter(customer => customer.active)
@@ -65,10 +61,6 @@ export default function Dashboard() {
             placeholder="Search customers..." 
           />
         </div>
-
-
-
-
 
       <div style={{ 
 

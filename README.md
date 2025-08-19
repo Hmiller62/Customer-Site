@@ -1,12 +1,48 @@
-# React + Vite
+#AMP Customer Service Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend logic for a CSR portal allowing users to navigate between registered users and assist them with questions, as well as edit, delete, and add information to their account.
 
-Currently, two official plugins are available:
+##Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- View customer database in grid view, identify specific customers using name, phone number, and email
+- View detailed customer information, including contact info, purchase history, and vehicle subscriptions
+- Edit customer information
+- Submit coupons, add charges, and remove accidental or unneeded transactions
+- Add and delete vehicle subscriptions
+- Transfer vehicle subscriptions by editing vehicle data or removing subscription and adding it to another cutsomer
+- Real-time database simulated through localStorage, front-end only implementation
 
-## Expanding the ESLint configuration
+##Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Created using reactNative and Vite for frontend
+Written in Javascript, with css and html for styling
+
+##Installation and Running
+
+This project is live using gitHub pages! Please feel free to contact me for the link, or use the following steps to run it yourself.
+
+- Clone the repo
+```sh
+git clone https://github.com/Hmiller62/Customer-Site.git
+```
+-Navigate to the project files
+```sh
+cd Customer-Site
+```
+
+- Install dependencies
+```sh
+npm install
+```
+
+- Run the project using vite
+```sh
+npm run dev
+```
+
+##Contact
+
+Created by Hayden Miller
+LinkedIn: [Hayden Miller](https://www.linkedin.com/in/hayden-j-miller/)
+Email: haydenmiller242@gmail.com for questions and comments
+Project Link: [https://github.com/Hmiller62/Customer-Site.git]https://github.com/Hmiller62/Customer-Site.git

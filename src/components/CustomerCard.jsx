@@ -12,9 +12,9 @@ const cardStyle = {
 export default function CustomerCard({customer}) {
   return (
     <div style ={cardStyle} className="customer-card">
-      <h2>{customer.name}</h2>
-      <p>Email: {customer.email}</p>
-      <p>Phone: {customer.phone}</p>
+      <h2 style={{fontFamily: "Helvetica"}}>{customer.name}</h2>
+      <p style={{fontFamily: "Helvetica"}}>Email: {customer.email}</p>
+      <p style={{fontFamily: "Helvetica"}}>Phone: {customer.phone}</p>
     </div>
   );
 }

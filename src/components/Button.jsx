@@ -1,13 +1,13 @@
-export default function Button({ onClick, children}) {
+export default function Button({ onClick, children, style}) {
     const baseStyle = {
         border: "1px solid #007BFF",  
         backgroundColor: "#007BFF", 
         color: "#E6F0FF",  
         paddingTop: "6px",
         paddingBottom: "4px",
-        paddingLeft: "8px",
-        paddingRight: "8px",
-        borderRadius: "4px",
+        paddingLeft: "15px",
+        paddingRight: "15px",
+        borderRadius: "50px",
         fontSize: "14px",
         fontWeight: "bold",
     };
@@ -15,7 +15,7 @@ export default function Button({ onClick, children}) {
     return (
     <button
       onClick={onClick}
-      style={baseStyle}
+      style={{...baseStyle, ...style}}
     >
       {children}
     </button>

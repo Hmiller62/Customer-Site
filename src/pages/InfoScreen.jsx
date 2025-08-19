@@ -173,31 +173,37 @@ export default function InfoScreen({customers, setCustomers}) {
 
 
   return (     //style and elements on the screen
-      <div
-      style={{
-        paddingLeft: "50px",
-        paddingRight: "50px"
-      }}
-      >
+      <div>
         <div 
         style={{ 
-          padding: "20px", 
+          marginLeft: "20px", 
+          fontFamily: "Helvetica"
            }}>
             <div 
             style={{ 
+              marginLeft: "-40px",
+              marginRight: "-40px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              paddingLeft: "50px",
               paddingRight: "100px",
-              marginBottom: "100px"
+              marginTop: "30px",
+              marginBottom: "50px",
+              backgroundColor: "#EDEBEB",
               }}>
                 <div style={{display: "flex",alignItems: "center", gap: "150px"}}>
-                  <h1>{currCustomer.name}</h1>
+                  <h1 style={{color: "#024e9fff"}}>{currCustomer.name}</h1>
                   <p>{currCustomer.active ? "Active Customer" : "Inactive"}</p> 
                 </div>
-                <Button style={{ marginLeft: "auto"}} onClick={() => { //display customer name, activity, and main buttons
+                <Button style={{ marginLeft: "auto" }} onClick={() => { //display customer name, activity, and main buttons
                 navigate(`/`)}}>Return to Dashboard</Button>
-                <Button style={{marginLeft: "auto"}} onClick={() => {
+                <Button style={{
+                  ...Button.baseStyle,
+                  backgroundColor: "#c51717ff",
+                  border: "#B82A2A",
+                  marginLeft: "20px"
+                }} onClick={() => {
                   if (!window.confirm(`Are you sure you want to delete ${currCustomer.name}'s account?`)) {
                     return;
                   }    
@@ -215,10 +221,12 @@ export default function InfoScreen({customers, setCustomers}) {
             style={{ 
               display: "flex", 
               flexDirection: "column",
-               gap: "8px",
-              marginTop: "20px"
+              gap: "8px",
+              marginTop: "20px",
+              marginLeft: "30px",
+              marginRight: "30px"
                }}>
-              <h3>Customer Information</h3> 
+              <h2 style={{color: "#024e9fff"}}>Customer Information</h2> 
               <div style={{ 
                 display: "flex", 
                 alignItems: "center", 
@@ -276,11 +284,19 @@ export default function InfoScreen({customers, setCustomers}) {
                   }
                   }>{editingPhone ? "Save" : "Edit"}</Button>
               </div>
+              </div>
 
 
 
 
-
+              <div style={{
+                display: "flex", 
+              flexDirection: "column",
+              gap: "8px",
+              marginLeft: "30px",
+              marginRight: "30px",
+              marginBottom: "45px"
+              }}>
               <p>Active Balance: ${currCustomer.balance.toFixed(2)}</p>
               <div style={{
                 display: "flex",
@@ -299,13 +315,19 @@ export default function InfoScreen({customers, setCustomers}) {
                         display: "flex", 
                         justifyContent: "space-between", 
                         alignItems: "center", 
+                        backgroundColor: "#EDEBEB",
                         marginBottom: "10px", 
-                        width: "90%",
+                        paddingLeft: "30px",
+                        paddingRight: "30px",
+                        paddingTop: "4px",
+                        paddingBottom: "4px",
+                        marginLeft: "-40px",
+                        marginRight: "-20px"
                         }}>
-                        <h3>Transactions</h3>
+                        <h2 style={{ color: "#024e9fff" }}>Transactions</h2>
                         <div style={{
                           display: "flex",
-                          flexDirection: "column"
+                          gap: "10px"
                         }}>
                           {!addingTransaction && (
                           <Button onClick={() => setAddingTransaction(true)}>+ Add Charge</Button>
@@ -320,7 +342,7 @@ export default function InfoScreen({customers, setCustomers}) {
                         <div style={{ 
                           display: "flex", 
                           gap: "8px", 
-                          marginBottom: "10px" 
+                          marginBottom: "10px",
                           }}>
                           <input
                             type="text"
@@ -379,6 +401,7 @@ export default function InfoScreen({customers, setCustomers}) {
                     </div>
                   )}
               </div>
+              </div>
               
 
 
@@ -388,9 +411,13 @@ export default function InfoScreen({customers, setCustomers}) {
               <div style={{ 
                 display: "flex", //logic for viewing/altering subscriptions
                 justifyContent: "space-between", 
-                alignItems: "center" 
+                alignItems: "center",
+                backgroundColor: "#EDEBEB",
+                paddingLeft: "15px", 
+                paddingRight: "15px", 
+                marginRight: "30px"
                 }}> 
-                  <h3>Active Subscriptions</h3>     
+                  <h3 style={{color: "#024e9fff"}}>Active Subscriptions</h3>     
                   {!addingSub &&
                   <Button onClick={() => setAddingSub(true)}>+ Add</Button>
                   }
@@ -472,7 +499,6 @@ export default function InfoScreen({customers, setCustomers}) {
                       </div>
                       
               </div>
-        </div>
       </div>
     </div>
 )}

@@ -16,9 +16,9 @@ const cardStyle = {
 export default function TransactionCard({transaction, deleteTransaction}) {
   return (
     <div style ={cardStyle} className="transaction-card">
-          <p>Amount: ${transaction.amount}</p>
-          <p>Type: {transaction.description}</p> 
-          <p>Date: {transaction.date}</p>
+          <p style={{fontFamily: "Helvetica"}}>Amount: ${transaction.amount}</p>
+          <p style={{fontFamily: "Helvetica"}}>Type: {transaction.description}</p> 
+          <p style={{fontFamily: "Helvetica"}}>Date: {transaction.date}</p>
           <div style={{ position: "absolute", top: "10px", right: "10px", display: "flex", gap: "5px" }}>
             <Button onClick={() => deleteTransaction(transaction)}>Delete</Button>
           </div>

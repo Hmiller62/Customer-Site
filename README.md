@@ -48,4 +48,4 @@ Created by Hayden Miller
 
 - Email: haydenmiller242@gmail.com for questions and comments
 
-- Project Link: [https://github.com/Hmiller62/Customer-Site.git]https://github.com/Hmiller62/Customer-Site.git
+- Project Link: [https://github.com/Hmiller62/Customer-Site.git](https://github.com/Hmiller62/Customer-Site.git)
